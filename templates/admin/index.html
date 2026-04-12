@@ -1,0 +1,319 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<div id="chart-data"
+  data-linha-labels="{{ chart_labels_json|escapejs }}"
+  data-linha-valores="{{ chart_valores_json|escapejs }}"
+  data-pizza-labels="{{ pizza_labels_json|escapejs }}"
+  data-pizza-valores="{{ pizza_valores_json|escapejs }}"
+  style="display:none;"></div>
+
+<style>
+  :root {
+    --bb-panel: #0f172a;
+    --bb-panel-alt: #111827;
+    --bb-panel-border: rgba(148, 163, 184, 0.14);
+    --bb-text: #e5e7eb;
+    --bb-text-soft: #9ca3af;
+    --bb-text-muted: #94a3b8;
+  }
+
+  /* ── Reset base ── */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* ── Cards ── */
+  .bb-card {
+    background: var(--bb-panel);
+    border: 1px solid var(--bb-panel-border);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+  }
+  .bb-card-next    { border-top: 3px solid #04ee27; }
+  .bb-card-revenue { border-top: 3px solid #04ee27; }
+
+  /* ── KPI labels ── */
+  .bb-kpi-label {
+    font-size: .7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .06em; color: var(--bb-text-soft); margin: 0 0 .4rem;
+  }
+  .bb-kpi-value { font-size: 2rem; font-weight: 700; line-height: 1; margin: 0 0 .3rem; }
+  .bb-kpi-sub   { font-size: .72rem; color: var(--bb-text-soft); margin: 0; }
+
+  .bb-card-title {
+    font-size: .875rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .07em; color: var(--bb-text); margin: 0 0 1rem;
+  }
+
+  /* ── KPI Grid: 3 colunas desktop, 1 coluna mobile ── */
+  .bb-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .75rem;
+    margin-bottom: 1rem;
+  }
+
+  /* ── Linha + Próximos: lado a lado desktop, empilhado mobile ── */
+  .bb-row-charts {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Pizza + Receita: lado a lado desktop, empilhado mobile ── */
+  .bb-row-pizza {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── Seção de gráfico de linha ── */
+  .bb-chart-box {
+    background: var(--bb-panel);
+    border-radius: .75rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--bb-panel-border);
+    min-width: 0; /* evita overflow */
+  }
+  .bb-chart-box p {
+    font-size: .875rem; font-weight: 600; margin: 0 0 1rem; color: var(--bb-text);
+  }
+
+  /* ── Tabelas ── */
+  .bb-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  .bb-table th {
+    color: var(--bb-text-soft); font-weight: 500; text-align: left;
+    padding: .35rem .6rem; border-bottom: 1px solid var(--bb-panel-border);
+    font-size: .75rem; text-transform: uppercase; letter-spacing: .05em;
+  }
+  .bb-table td {
+    padding: .45rem .6rem; color: var(--bb-text);
+    border-bottom: 1px solid var(--bb-panel-border);
+  }
+  .bb-table tr:last-child td { border-bottom: none; }
+
+  /* ── Tabela mobile: scroll horizontal ── */
+  .bb-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  .bb-empty { color: var(--bb-text-soft); font-size: .85rem; padding: .5rem 0; }
+
+  /* ════════════════════════════════
+     MOBILE  ≤ 768px
+  ════════════════════════════════ */
+  @media (max-width: 768px) {
+
+    /* KPIs em coluna única */
+    .bb-kpi-grid {
+      grid-template-columns: 1fr;
+    }
+
+    /* KPI value menor pra não transbordar */
+    .bb-kpi-value { font-size: 1.6rem; }
+
+    /* Receita mês: fonte menor */
+    .bb-kpi-value.receita-val { font-size: 1.25rem !important; }
+
+    /* Gráfico linha + próximos: 1 coluna */
+    .bb-row-charts {
+      grid-template-columns: 1fr;
+    }
+
+    /* Pizza + receita: 1 coluna */
+    .bb-row-pizza {
+      grid-template-columns: 1fr;
+    }
+
+    /* Card gráfico pizza: altura controlada */
+    .bb-chart-box canvas { max-height: 220px; }
+
+    /* Título menor */
+    .bb-card-title { font-size: .78rem; }
+
+    /* Padding menor nos cards */
+    .bb-card { padding: .85rem 1rem; }
+    .bb-chart-box { padding: 1rem 1rem; }
+
+    /* Tabela próximos: esconde coluna serviço em telas muito pequenas */
+    .bb-hide-sm { display: none; }
+  }
+
+  /* ════════════════════════════════
+     TABLET  769px – 1100px
+  ════════════════════════════════ */
+  @media (min-width: 769px) and (max-width: 1100px) {
+    .bb-kpi-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .bb-row-charts {
+      grid-template-columns: 1fr 300px;
+    }
+    .bb-row-pizza {
+      grid-template-columns: 300px 1fr;
+    }
+  }
+</style>
+
+<div style="padding: 1rem 0 2rem; color:var(--bb-text);">
+
+  <!-- KPIs -->
+  <div class="bb-kpi-grid">
+    <div class="bb-card" style="border-top: 3px solid #ff0000;">
+      <p class="bb-kpi-label">Hoje</p>
+      <p class="bb-kpi-value" style="color:#d10b0b;">{{ kpis.hoje }}</p>
+      <p class="bb-kpi-sub">{{ hoje_fmt }}</p>
+    </div>
+
+    <div class="bb-card" style="border-top: 3px solid #11ff00;">
+      <p class="bb-kpi-label">Confirmados no mês</p>
+      <p class="bb-kpi-value" style="color:#0be15a;">{{ kpis.confirmados_mes }}</p>
+      <p class="bb-kpi-sub">{{ mes_nome }}</p>
+    </div>
+
+    <div class="bb-card" style="border-top: 3px solid #ffea00;">
+      <p class="bb-kpi-label">Receita mês</p>
+      <p class="bb-kpi-value receita-val" style="color:#e8e80d; font-size:1.5rem;">R$&nbsp;{{ kpis.receita_mes }}</p>
+      <p class="bb-kpi-sub">{{ mes_nome }}</p>
+    </div>
+  </div>
+
+  <!-- Gráfico Linha + Próximos Hoje -->
+  <div class="bb-row-charts">
+
+    <div class="bb-chart-box">
+      <p>AGENDAMENTOS - ÚLTIMOS 30 DIAS</p>
+      <canvas id="chartLinha" height="110"></canvas>
+    </div>
+
+    <div class="bb-card bb-card-next">
+      <p class="bb-card-title">⏱️ Próximos Hoje ({{ hoje_fmt }})</p>
+      {% if proximos_hoje %}
+        <div class="bb-table-wrap">
+          <table style="width:100%; border-collapse:collapse; font-size:.8rem;">
+            <thead>
+              <tr style="color:var(--bb-text-soft); border-bottom:1px solid var(--bb-panel-border);">
+                <th style="text-align:left; padding:.35rem .5rem;">Hora</th>
+                <th style="text-align:left; padding:.35rem .5rem;">Cliente</th>
+                <th style="text-align:left; padding:.35rem .5rem;" class="bb-hide-sm">Serviço</th>
+                <th style="text-align:left; padding:.35rem .5rem;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for ag in proximos_hoje %}
+              <tr style="border-bottom:1px solid var(--bb-panel-border);">
+                <td style="padding:.4rem .5rem; font-weight:600; white-space:nowrap;">{{ ag.horario }}</td>
+                <td style="padding:.4rem .5rem;">{{ ag.nome }}</td>
+                <td style="padding:.4rem .5rem; color:var(--bb-text-muted);" class="bb-hide-sm">{{ ag.servico }}</td>
+                <td style="padding:.4rem .5rem;">
+                  {% if ag.status == "confirmado" %}
+                    <span style="color:#22c55e; font-weight:600; white-space:nowrap;">✔ confirmado</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p style="color:var(--bb-text-soft); font-size:.85rem;">Nenhum agendamento para hoje.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <!-- Pizza + Receita por Serviço -->
+  <div class="bb-row-pizza">
+
+    <div class="bb-chart-box">
+      <p>SERVIÇOS DO MÊS</p>
+      <canvas id="chartPizza" height="220"></canvas>
+    </div>
+
+    <div class="bb-card bb-card-revenue">
+      <p class="bb-card-title">Receita por Serviço (mês atual — confirmados)</p>
+      {% if receita_por_servico %}
+        <div class="bb-table-wrap">
+          <table style="width:100%; border-collapse:collapse; font-size:.85rem;">
+            <thead>
+              <tr style="color:var(--bb-text-soft); border-bottom:1px solid var(--bb-panel-border);">
+                <th style="text-align:left; padding:.4rem .5rem;">Serviço</th>
+                <th style="text-align:right; padding:.4rem .5rem;">Qtd</th>
+                <th style="text-align:right; padding:.4rem .5rem;">Receita</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in receita_por_servico %}
+              <tr style="border-bottom:1px solid var(--bb-panel-border);">
+                <td style="padding:.4rem .5rem;">{{ item.servico }}</td>
+                <td style="padding:.4rem .5rem; text-align:right;">{{ item.qtd }}</td>
+                <td style="padding:.4rem .5rem; text-align:right; font-weight:600; color:#22c55e; white-space:nowrap;">R$ {{ item.receita }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p style="color:var(--bb-text-soft); font-size:.85rem;">Sem dados de receita este mês.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  const isDark    = document.documentElement.classList.contains("dark");
+  const gridColor  = isDark ? "rgba(255,255,255,.07)" : "rgba(0,0,0,.07)";
+  const labelColor = isDark ? "#9ca3af" : "#6b7280";
+
+  new Chart(document.getElementById("chartLinha"), {
+    type: "line",
+    data: {
+      labels: {{ chart_labels_json|safe }},
+      datasets: [{
+        label: "Agendamentos",
+        data: {{ chart_valores_json|safe }},
+        borderColor: "#6366f1",
+        backgroundColor: "rgba(99,102,241,.15)",
+        fill: true,
+        tension: .4,
+        pointRadius: 3,
+        pointBackgroundColor: "#6366f1",
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: labelColor, maxTicksLimit: 8 }, grid: { color: gridColor } },
+        y: { ticks: { color: labelColor, precision: 0 }, grid: { color: gridColor }, beginAtZero: true },
+      }
+    }
+  });
+
+  const pizzaColors = ["#181ceb","#12d104","#fa6000","#e71111","#ae00ff","#00e5ff"];
+  new Chart(document.getElementById("chartPizza"), {
+    type: "doughnut",
+    data: {
+      labels: {{ pizza_labels_json|safe }},
+      datasets: [{
+        data: {{ pizza_valores_json|safe }},
+        backgroundColor: pizzaColors,
+        borderWidth: 2,
+        borderColor: isDark ? "#1f2937" : "#ffffff",
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: "bottom", labels: { color: labelColor, padding: 12, boxWidth: 14 } }
+      }
+    }
+  });
+})();
+</script>
+{% endblock %}

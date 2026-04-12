@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ config.nome }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cor-fundo:    #0a1628;
+  --cor-card:     #112240;
+  --cor-borda:    #1e3a5f;
+  --cor-vermelho: #c0392b;
+  --cor-branco:   #f5f0e8;
+  --cor-cinza:    #8a9bb0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--cor-fundo); color: var(--cor-branco); font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+body::after { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(-55deg, transparent, transparent 60px, rgba(192,57,43,0.05) 60px, rgba(192,57,43,0.05) 62px); pointer-events: none; z-index: 0; }
+
+/* HEADER */
+header { position: sticky; top: 0; z-index: 100; background: var(--cor-fundo); border-bottom: 3px solid var(--cor-vermelho); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 68px; }
+.logo { display: flex; align-items: center; gap: 0.8rem; }
+.poste { display: flex; flex-direction: column; width: 16px; height: 38px; border: 2px solid var(--cor-branco); border-radius: 8px; overflow: hidden; }
+.poste span:nth-child(1) { flex:1; background: var(--cor-vermelho); }
+.poste span:nth-child(2) { flex:1; background: #fff; }
+.poste span:nth-child(3) { flex:1; background: #1a56a0; }
+.poste span:nth-child(4) { flex:1; background: var(--cor-vermelho); }
+.poste span:nth-child(5) { flex:1; background: #fff; }
+.logo-nome { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: #fff; letter-spacing: 0.08em; }
+.logo-nome span { color: var(--cor-vermelho); }
+nav { display: flex; gap: 2rem; }
+nav a { font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cor-cinza); text-decoration: none; transition: color .2s; }
+nav a:hover { color: #fff; }
+nav {display: flex;gap: 2rem;position: absolute;left: 50%;transform: translateX(-50%);}
+
+
+/* BOTÃO WPP HEADER - arredondado */
+.btn-wpp { display: flex; align-items: center; gap: 0.5rem; background: var(--cor-vermelho); color: #fff; border: none; padding: 0.55rem 1.3rem; cursor: pointer; text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; transition: opacity .2s; border-radius: 999px; }
+.btn-wpp:hover { opacity: 0.85; }
+
+/* HERO */
+.hero { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 5rem 2rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.hero-tag { display: flex; align-items: center; gap: 0.8rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--cor-vermelho); margin-bottom: 1rem; }
+.hero-tag::before { content: ''; width: 2.5rem; height: 2px; background: var(--cor-vermelho); }
+.hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.2rem, 6vw, 5rem); line-height: 0.95; letter-spacing: 0.04em; color: #fff; margin-bottom: 1.2rem; }
+.hero h1 em { font-style: normal; color: var(--cor-vermelho); display: block; }
+.hero p { font-size: 0.95rem; line-height: 1.8; color: var(--cor-cinza); max-width: 400px; margin-bottom: 1.5rem; }
+.hero-info { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 2rem; }
+.hero-info span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; color: var(--cor-cinza); }
+.hero-info b { color: var(--cor-branco); }
+.stats { display: flex; gap: 0; border-top: 1px solid var(--cor-borda); padding-top: 1.8rem; margin-top: 1.8rem; }
+.stat { flex: 1; padding: 0 1.5rem; border-right: 1px solid var(--cor-borda); }
+.stat:first-child { padding-left: 0; }
+.stat:last-child  { border-right: none; }
+.stat-num   { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--cor-vermelho); line-height: 1; }
+.stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cor-cinza); margin-top: 0.2rem; }
+
+/* FORMULÁRIO */
+.form-card { position: relative; z-index: 1; background: var(--cor-card); border: 1px solid var(--cor-borda); padding: 2.2rem; }
+.form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--cor-vermelho), #1a56a0, var(--cor-vermelho)); }
+.form-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.06em; color: #fff; margin-bottom: 0.2rem; }
+.form-card p  { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cor-vermelho); margin-bottom: 1.8rem; }
+.campo { margin-bottom: 1.2rem; }
+.campo label { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cor-cinza); margin-bottom: 0.45rem; }
+input, select { width: 100%; background: var(--cor-fundo); border: 1px solid var(--cor-borda); color: #fff; font-family: 'Barlow', sans-serif; font-size: 0.88rem; padding: 0.7rem 0.9rem; outline: none; transition: border-color .2s; appearance: none; -webkit-appearance: none; min-height: 44px; border-radius: 0; }
+input:focus, select:focus { border-color: var(--cor-vermelho); }
+select option { background: var(--cor-fundo); }
+input[type="date"] { color: #fff; -webkit-text-fill-color: #fff; }
+input[type="date"]::-webkit-datetime-edit { color: #fff; }
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.7; cursor: pointer; }
+.linha2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+.grade-servicos { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.2rem; }
+.svc-item { position: relative; }
+.radio-svc { clip: rect(0,0,0,0); position: absolute; width: 1px; height: 1px; overflow: hidden; }
+.label-svc { display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 0.8rem; border: 1px solid var(--cor-borda); cursor: pointer; transition: all .2s; font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; font-weight: 500; color: var(--cor-cinza); }
+.label-svc:hover { border-color: var(--cor-vermelho); color: #fff; }
+.radio-svc:checked + .label-svc { border-color: var(--cor-vermelho); background: rgba(192,57,43,0.12); color: #fff; }
+.chk { width: 13px; height: 13px; border: 1px solid currentColor; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 8px; }
+.radio-svc:checked + .label-svc .chk::after { content: '✓'; }
+.preco-svc { font-size: 0.68rem; color: var(--cor-vermelho); margin-top: 1px; }
+.slots { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.2rem; }
+.radio-slot { display: none; }
+.label-slot { display: inline-flex; align-items: center; padding: 0.4rem 0.75rem; border: 1px solid var(--cor-borda); font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all .15s; color: var(--cor-cinza); }
+.label-slot:hover { border-color: var(--cor-vermelho); color: #fff; }
+.radio-slot:checked + .label-slot { background: var(--cor-vermelho); border-color: var(--cor-vermelho); color: #fff; font-weight: 700; }
+.label-slot.ocupado { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; pointer-events: none; background: #374151; }
+.btn-confirmar { width: 100%; background: var(--cor-vermelho); color: #fff; border: none; padding: 1rem; cursor: pointer; transition: opacity .2s; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.2em; }
+.btn-confirmar:hover { opacity: 0.85; }
+.btn-confirmar::after { content: ' →'; }
+
+/* MENSAGENS DJANGO */
+.mensagens { position: fixed; top: 80px; right: 1rem; z-index: 300; display: flex; flex-direction: column; gap: 0.5rem; }
+.msg { padding: 0.8rem 1.5rem; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; }
+.msg.success { background: #27ae60; color: #fff; }
+.msg.error   { background: var(--cor-vermelho); color: #fff; }
+
+/* MODAL */
+.modal { display: none; position: fixed; inset: 0; background: rgba(6,14,26,.97); z-index: 500; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem; }
+.modal.aberto { display: flex; }
+.modal-icone { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--cor-vermelho); margin-bottom: 1rem; animation: pop .4s ease; }
+@keyframes pop { 0%{transform:scale(0);opacity:0} 80%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+.modal h2 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; letter-spacing: 0.1em; color: #fff; margin-bottom: 0.3rem; }
+.modal p  { font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cor-vermelho); margin-bottom: 2rem; }
+.modal-detalhes { border: 1px solid var(--cor-borda); padding: 1.5rem 2.5rem; margin-bottom: 2rem; text-align: left; max-width: 380px; width: 100%; }
+.modal-linha { display: flex; justify-content: space-between; gap: 2rem; margin-bottom: 0.7rem; font-size: 0.82rem; }
+.modal-chave { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cor-cinza); }
+.btn-fechar { background: transparent; border: 1px solid var(--cor-vermelho); color: var(--cor-vermelho); padding: 0.7rem 2.5rem; cursor: pointer; transition: all .2s; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.2em; }
+.btn-fechar:hover { background: var(--cor-vermelho); color: #fff; }
+
+/* SEÇÕES */
+.secao { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 5rem 2rem; }
+.secao-topo { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 2.5rem; }
+.secao-topo h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 0.06em; color: #fff; }
+.secao-topo hr  { flex: 1; border: none; border-top: 1px solid var(--cor-borda); }
+.secao-topo span { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cor-cinza); }
+.divisor { position: relative; z-index: 1; display: flex; align-items: center; gap: 1rem; padding: 0 2rem; max-width: 1200px; margin: 0 auto; opacity: 0.35; }
+.divisor hr { flex: 1; border: none; border-top: 1px solid var(--cor-borda); }
+.divisor span { font-size: 0.55rem; color: var(--cor-vermelho); letter-spacing: 0.4em; }
+
+/* CARDS SERVIÇO */
+.grade-svc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.card-svc { background: var(--cor-card); border: 1px solid var(--cor-borda); padding: 1.6rem 1.2rem; text-align: center; transition: border-color .2s, transform .2s; position: relative; overflow: hidden; }
+.card-svc::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--cor-vermelho); transform: scaleX(0); transition: transform .25s; }
+.card-svc:hover { border-color: var(--cor-vermelho); transform: translateY(-2px); }
+.card-svc:hover::before { transform: scaleX(1); }
+.card-svc .nome  { font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cor-cinza); margin-bottom: 0.8rem; }
+.card-svc .valor { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #fff; line-height: 1; }
+.card-svc .tempo { font-size: 0.68rem; color: var(--cor-cinza); margin-top: 0.4rem; }
+
+/* PLANOS */
+.grade-planos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.card-plano { background: var(--cor-card); border: 1px solid var(--cor-borda); padding: 2rem; position: relative; transition: border-color .2s; }
+.card-plano:hover { border-color: rgba(192,57,43,0.5); }
+.card-plano.destaque { border-color: var(--cor-vermelho); }
+.badge { display: none; font-family: 'Barlow Condensed', sans-serif; font-size: 0.58rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; background: var(--cor-vermelho); color: #fff; padding: 0.22rem 0.8rem; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.card-plano.destaque .badge { display: block; }
+.card-plano h3   { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.06em; color: #fff; text-align: center; margin-bottom: 0.4rem; }
+.card-plano .preco  { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: var(--cor-vermelho); text-align: center; line-height: 1; }
+.card-plano .periodo { font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cor-cinza); text-align: center; padding-bottom: 1.4rem; margin-bottom: 1.4rem; border-bottom: 1px solid var(--cor-borda); }
+.card-plano ul { list-style: none; margin-bottom: 1.6rem; }
+.card-plano li { font-size: 0.82rem; color: var(--cor-cinza); padding: 0.45rem 0; border-bottom: 1px solid rgba(30,58,95,0.6); display: flex; align-items: center; gap: 0.6rem; }
+.card-plano li::before { content: ''; width: 6px; height: 6px; background: var(--cor-vermelho); flex-shrink: 0; }
+.btn-plano { width: 100%; background: transparent; border: 1px solid var(--cor-borda); color: var(--cor-cinza); padding: 0.7rem; cursor: pointer; transition: all .2s; font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; display: block; text-align: center; }
+.btn-plano:hover { border-color: var(--cor-vermelho); color: #fff; }
+.card-plano.destaque .btn-plano { background: var(--cor-vermelho); border-color: var(--cor-vermelho); color: #fff; }
+
+/* HORÁRIOS */
+.grade-horarios { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.card-hora { background: var(--cor-card); border: 1px solid var(--cor-borda); padding: 2rem; display: flex; align-items: center; gap: 1.5rem; transition: border-color .2s; }
+.card-hora:hover { border-color: var(--cor-vermelho); }
+.hora-icone { flex-shrink: 0; width: 60px; height: 60px; border: 2px solid var(--cor-vermelho); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--cor-vermelho); text-align: center; }
+.hora-dia   { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cor-cinza); margin-bottom: 0.3rem; }
+.hora-valor { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #fff; line-height: 1; }
+.hora-desc  { font-size: 0.75rem; color: var(--cor-cinza); margin-top: 0.3rem; }
+.hora-btn   { margin-top: 0.8rem; display: inline-block; background: transparent; border: 1px solid var(--cor-borda); color: var(--cor-cinza); padding: 0.38rem 1rem; cursor: pointer; transition: all .2s; font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+.hora-btn:hover { border-color: var(--cor-vermelho); color: #fff; }
+
+/* CTA */
+.cta { position: relative; z-index: 1; background: var(--cor-vermelho); padding: 5rem 2rem; text-align: center; overflow: hidden; }
+.cta::before { content: '{{ config.nome|upper }}'; position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: 18vw; color: rgba(0,0,0,0.12); letter-spacing: 0.1em; top: 50%; left: 50%; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; }
+.cta h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 0.06em; color: #fff; margin-bottom: 0.8rem; position: relative; }
+.cta p  { font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.75); margin-bottom: 2rem; position: relative; }
+.btn-cta { display: inline-flex; align-items: center; gap: 0.8rem; background: #fff; color: var(--cor-vermelho); border: none; padding: 1rem 2.5rem; cursor: pointer; text-decoration: none; transition: opacity .2s; position: relative; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.2em; }
+.btn-cta:hover { opacity: 0.9; }
+
+/* FOOTER */
+footer { position: relative; z-index: 1; background: #060e1a; border-top: 3px solid var(--cor-vermelho); padding: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.footer-marca { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: #fff; }
+.footer-marca span { color: var(--cor-vermelho); }
+.footer-copy { font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; color: rgba(138,155,176,0.5); letter-spacing: 0.1em; margin-top: 0.3rem; }
+.footer-info { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+.footer-item { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; color: var(--cor-cinza); display: flex; align-items: center; gap: 0.4rem; }
+.footer-item a { color: var(--cor-cinza); text-decoration: none; transition: color .2s; }
+.footer-item a:hover { color: #fff; }
+
+/* WA FLUTUANTE - com ícone SVG do WhatsApp */
+.wa-fixo {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #25D366;
+  color: #fff;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  z-index: 200;
+  box-shadow: 0 4px 20px rgba(37,211,102,.4);
+  transition: transform .2s;
+}
+.wa-fixo:hover { transform: scale(1.08); }
+.wa-fixo svg { width: 28px; height: 28px; fill: #fff; }
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .hero           { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1rem 2rem; }
+  .linha2         { grid-template-columns: 1fr; }
+  .grade-servicos { grid-template-columns: 1fr; }
+  .grade-svc      { grid-template-columns: 1fr 1fr; }
+  .grade-planos   { grid-template-columns: 1fr; }
+  .grade-horarios { grid-template-columns: 1fr; }
+  nav             { display: none; }
+  footer          { flex-direction: column; text-align: center; }
+  .footer-info    { flex-direction: column; gap: 0.6rem; }
+  .form-card      { padding: 1.5rem 1rem; }
+}
+@media (max-width: 420px) {
+  .grade-svc { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+{% if messages %}
+<div class="mensagens">
+  {% for msg in messages %}
+    <div class="msg {{ msg.tags }}">{{ msg }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-icone">✂</div>
+  <h2>AGENDADO!</h2>
+  <p>Seu horário foi confirmado</p>
+  <div class="modal-detalhes" id="modal-det"></div>
+  <button class="btn-fechar" id="btn-fechar">Fechar</button>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="poste"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="logo-nome">{{ config.nome }}</div>
+  </div>
+  <nav>
+    <a href="#servicos">Serviços</a>
+    <a href="#planos">Planos</a>
+    <a href="#horarios">Horários</a>
+    <a href="#agendar">Agendar</a>
+  </nav>
+</header>
+
+<!-- HERO + FORMULÁRIO -->
+<section class="hero" id="agendar">
+
+  <div>
+    <div class="hero-tag">{{ config.cidade }}</div>
+    <h1>{{ config.titulo_hero }}<em>{{ config.titulo_destaque }}</em></h1>
+    <p>{{ config.subtitulo }}</p>
+
+    <div class="hero-info">
+      <span>📍 <b>{{ config.endereco }}</b></span>
+      <span>📸 <b>{{ config.instagram }}</b></span>
+      <span>📞 <b>{{ config.telefone }}</b></span>
+    </div>
+
+    <div class="stats">
+      {% for s in servicos_form|slice:":3" %}
+      <div class="stat">
+        <div class="stat-num">{{ s.preco }}</div>
+        <div class="stat-label">{{ s.nome }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Formulário de agendamento -->
+  <div class="form-card">
+    <h2>Agendar Horário</h2>
+    <p>Preencha e confirme</p>
+
+    <form method="POST" action="{% url 'agendar' %}" id="form-agendamento">
+      {% csrf_token %}
+
+      <div class="linha2">
+        <div class="campo">
+          <label>Nome</label>
+          <input type="text" name="nome" id="campo-nome" placeholder="Seu nome" required>
+        </div>
+        <div class="campo">
+          <label>Telefone</label>
+          <input type="tel" name="telefone" placeholder="{{ config.telefone }}">
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Serviço</label>
+        <div class="grade-servicos">
+          {% for s in servicos_form %}
+          <div class="svc-item">
+            <input type="radio" name="servico" id="svc{{ s.id }}"
+                   value="{{ s.nome }}"
+                   class="radio-svc"
+                   {% if s.padrao %}checked{% endif %}>
+            <label for="svc{{ s.id }}" class="label-svc">
+              <span class="chk"></span>
+              <span>
+                <div>{{ s.nome }}</div>
+                <div class="preco-svc">{{ s.preco }}</div>
+              </span>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="linha2">
+        <div class="campo">
+          <label>Data</label>
+          <input type="date" name="data" id="campo-data" min="{{ hoje }}" value="{{ hoje }}" required>
+        </div>
+        <div class="campo">
+          <label>Tarifa do dia</label>
+          <select name="tarifa" id="campo-tarifa" style="pointer-events: none;">
+            <option value="">Selecione uma data</option>
+            {% for t in tarifas_select %}
+            <option value="{{ t.dias }} — {{ t.preco }}">{{ t.dias }} — {{ t.preco }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label>Horário disponível</label>
+        <div class="slots">
+          {% for h in horarios %}
+          <input type="radio" name="horario" id="slot{{ h.id }}"
+                 value="{{ h.hora }}" class="radio-slot"
+                 {% if h.ocupado %}disabled{% endif %}>
+          <label for="slot{{ h.id }}" class="label-slot {% if h.ocupado %}ocupado{% endif %}">
+            {{ h.hora }}
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <button type="submit" class="btn-confirmar">Confirmar Agendamento</button>
+    </form>
+  </div>
+
+</section>
+
+<div class="divisor"><hr><span>★ ★ ★</span><hr></div>
+
+<!-- SERVIÇOS -->
+<section class="secao" id="servicos">
+  <div class="secao-topo">
+    <h2>Nossos Serviços</h2>
+    <hr>
+    <span>{{ servicos_card|length }} opções</span>
+  </div>
+  <div class="grade-svc">
+    {% for s in servicos_card %}
+    <div class="card-svc">
+      <div class="nome">{{ s.nome }}</div>
+      <div class="valor">{{ s.preco }}</div>
+      <div class="tempo">{{ s.tempo }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="divisor"><hr><span>★ ★ ★</span><hr></div>
+
+<!-- PLANOS MENSAIS -->
+<section class="secao" id="planos">
+  <div class="secao-topo">
+    <h2>Planos Mensais</h2>
+    <hr>
+    <span>{{ planos|length }} planos</span>
+  </div>
+  <div class="grade-planos">
+    {% for p in planos %}
+    <div class="card-plano {% if p.destaque %}destaque{% endif %}">
+      <div class="badge">MAIS POPULAR</div>
+      <h3>{{ p.nome }}</h3>
+      <div class="preco">{{ p.preco }}</div>
+      <div class="periodo">{{ p.periodo }}</div>
+      <ul>
+        {% for item in p.itens.all %}
+        <li>{{ item.texto }}</li>
+        {% endfor %}
+      </ul>
+      <a href="https://wa.me/{{ config.whatsapp }}?text=Olá! Quero contratar o {{ p.nome }} {{ p.preco }}."
+         class="btn-plano" target="_blank">Contratar Plano</a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="divisor"><hr><span>★ ★ ★</span><hr></div>
+
+<!-- HORÁRIOS E TARIFAS -->
+<section class="secao" id="horarios">
+  <div class="secao-topo">
+    <h2>Horários & Tarifas</h2>
+    <hr>
+    <span>{{ tarifas|length }} faixas</span>
+  </div>
+  <div class="grade-horarios">
+    {% for t in tarifas %}
+    <div class="card-hora">
+      <div class="hora-icone">{{ t.sigla }}</div>
+      <div>
+        <div class="hora-dia">{{ t.dias }}</div>
+        <div class="hora-valor">{{ t.preco }}</div>
+        <div class="hora-desc">{{ t.descricao }}</div>
+        <a href="https://wa.me/{{ config.whatsapp }}?text=Quero agendar {{ t.dias }}."
+           class="hora-btn" target="_blank">Agendar agora</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta">
+  <h2>PRONTO PARA UM NOVO VISUAL?</h2>
+  <p>Agende agora pelo WhatsApp ou preencha o formulário</p>
+  <a href="https://wa.me/{{ config.whatsapp }}?text=Olá {{ config.nome }}! Quero agendar."
+     class="btn-cta" target="_blank">AGENDAR PELO WHATSAPP</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-marca">{{ config.nome }}</div>
+    <div class="footer-copy">© 2025 Todos os direitos reservados</div>
+  </div>
+  <div class="footer-info">
+    <div class="footer-item">📍 {{ config.endereco }}</div>
+    <div class="footer-item">📞 <a href="tel:+{{ config.whatsapp }}">{{ config.telefone }}</a></div>
+    <div class="footer-item">📸 <a href="https://www.instagram.com/breno_barberr_/" target="_blank">{{ config.instagram }}</a></div>
+  </div>
+</footer>
+
+<!-- BOTÃO FLUTUANTE WHATSAPP com ícone SVG oficial -->
+<a href="https://wa.me/{{ config.whatsapp }}?text=Olá! Quero agendar." class="wa-fixo" target="_blank" aria-label="WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+    <path d="M16 .5C7.44.5.5 7.44.5 16c0 2.72.7 5.27 1.94 7.49L.5 31.5l8.23-2.16A15.43 15.43 0 0016 31.5C24.56 31.5 31.5 24.56 31.5 16S24.56.5 16 .5zm0 28.18a12.6 12.6 0 01-6.43-1.76l-.46-.27-4.88 1.28 1.3-4.76-.3-.49A12.6 12.6 0 013.32 16C3.32 9.03 9.03 3.32 16 3.32S28.68 9.03 28.68 16 22.97 28.68 16 28.68zm6.9-9.43c-.38-.19-2.24-1.1-2.58-1.23-.35-.13-.6-.19-.86.19-.25.38-.97 1.23-1.19 1.48-.22.25-.44.28-.81.09-.38-.19-1.59-.59-3.03-1.87-1.12-1-1.87-2.24-2.09-2.61-.22-.38-.02-.58.16-.77.17-.17.38-.44.56-.66.19-.22.25-.38.38-.63.13-.25.06-.47-.03-.66-.09-.19-.86-2.06-1.18-2.82-.31-.74-.63-.64-.86-.65h-.73c-.25 0-.66.09-1.01.47-.34.38-1.31 1.28-1.31 3.12s1.34 3.62 1.53 3.87c.19.25 2.64 4.03 6.4 5.65.89.38 1.59.61 2.13.78.9.28 1.71.24 2.35.15.72-.11 2.24-.92 2.55-1.8.31-.89.31-1.65.22-1.8-.09-.16-.34-.25-.72-.44z"/>
+  </svg>
+</a>
+
+<script>
+const ocupados = {{ ocupados_json|safe }};
+const tarifaMap = {{ tarifas_map_json|safe }};
+
+function normalizarServico(valor) {
+  return (valor || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+function servicoUsaTarifa() {
+  const servico = document.querySelector('input[name="servico"]:checked')?.value || "";
+  return ["cortesocial", "cortesocialtradicional"].includes(normalizarServico(servico));
+}
+
+function atualizarTarifa(dataStr) {
+  if (!dataStr) return;
+  const [ano, mes, dia] = dataStr.split("-").map(Number);
+  const diaSemana = new Date(ano, mes - 1, dia).getDay();
+  const campoTarifa = document.getElementById("campo-tarifa");
+  const valorAlvo = servicoUsaTarifa() ? tarifaMap[diaSemana] : "";
+
+  if (!valorAlvo) {
+    campoTarifa.selectedIndex = 0;
+    campoTarifa.value = "";
+    return;
+  }
+
+  document.querySelectorAll('#campo-tarifa option').forEach(opt => {
+    opt.selected = opt.value === valorAlvo;
+  });
+}
+
+document.getElementById("campo-data").addEventListener("change", function () {
+  atualizarTarifa(this.value);
+  const horariosOcupados = ocupados[this.value] || [];
+  document.querySelectorAll(".radio-slot").forEach(input => {
+    const label = document.querySelector(`label[for="${input.id}"]`);
+    const estaOcupado = horariosOcupados.includes(input.value);
+    input.disabled = estaOcupado;
+    if (estaOcupado) { input.checked = false; label.classList.add("ocupado"); }
+    else { label.classList.remove("ocupado"); }
+  });
+});
+
+document.querySelectorAll('input[name="servico"]').forEach(input => {
+  input.addEventListener("change", function () {
+    atualizarTarifa(document.getElementById("campo-data").value);
+  });
+});
+
+document.getElementById("campo-data").dispatchEvent(new Event("change"));
+
+let formParaEnviar = null;
+
+document.getElementById("form-agendamento").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const nome    = this.querySelector('[name="nome"]').value.trim();
+  const horario = this.querySelector('[name="horario"]:checked')?.value;
+  const data    = this.querySelector('[name="data"]').value;
+  const servico = this.querySelector('[name="servico"]:checked')?.value;
+  const tarifa  = this.querySelector('[name="tarifa"]').value;
+
+  if (!nome || !horario || !data || !servico) {
+    this.submit();
+    return;
+  }
+
+  const [ano, mes, dia] = data.split("-");
+  const dataFmt = `${dia}/${mes}/${ano}`;
+
+  document.getElementById("modal-det").innerHTML = `
+    <div class="modal-linha"><span class="modal-chave">Nome</span><span>${nome}</span></div>
+    <div class="modal-linha"><span class="modal-chave">Serviço</span><span>${servico}</span></div>
+    <div class="modal-linha"><span class="modal-chave">Data</span><span>${dataFmt}</span></div>
+    <div class="modal-linha"><span class="modal-chave">Horário</span><span>${horario}</span></div>
+    <div class="modal-linha"><span class="modal-chave">Tarifa</span><span>${tarifa}</span></div>
+  `;
+
+  formParaEnviar = this;
+  document.getElementById("modal").classList.add("aberto");
+});
+
+document.getElementById("btn-fechar").addEventListener("click", function () {
+  document.getElementById("modal").classList.remove("aberto");
+  if (formParaEnviar) formParaEnviar.submit();
+});
+
+setTimeout(() => {
+  document.querySelectorAll('.msg').forEach(m => m.style.display = 'none');
+}, 5000);
+</script>
+
+</body>
+</html>

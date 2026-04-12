@@ -1,104 +1,110 @@
-# Breno Barber — Django
+# Breno Barber
 
-Site institucional + painel de agendamentos da Breno Barber.
+Aplicação Django para o site da barbearia e o painel administrativo de agendamentos.
 
----
+O projeto reúne:
+- página institucional com formulário de agendamento
+- regras de tarifa por dia para `Corte social`
+- controle de horários disponíveis
+- dashboard administrativo com métricas e gráficos no `/admin`
 
-## Requisitos
+## Stack
 
 - Python 3.10+
-- pip
+- Django 5
+- django-unfold para o admin
+- SQLite em desenvolvimento
+- PostgreSQL em produção
 
----
-
-## Instalação (desenvolvimento)
+## Como rodar localmente
 
 ```bash
-# 1. Clone o projeto e entre na pasta
-cd brenobarber
-
-# 2. Crie e ative o ambiente virtual
-python -m venv .venv
-source .venv/bin/activate        # Linux/Mac
-# .venv\Scripts\activate         # Windows
-
-# 3. Instale as dependências
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
-
-# 4. Configure o .env
-cp .env.example .env
-# Edite o .env e gere uma SECRET_KEY:
-# python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
-
-# 5. Rode as migrations
 python manage.py migrate
-
-# 6. Crie o superusuário (para acessar o admin)
 python manage.py createsuperuser
-
-# 7. Suba o servidor
 python manage.py runserver
 ```
 
-Acesse:
-- Site: http://localhost:8000
-- Admin: http://localhost:8000/admin
+URLs úteis:
+- Site: `http://127.0.0.1:8000/`
+- Admin: `http://127.0.0.1:8000/admin/`
 
----
+## Configuração
 
-## Estrutura do projeto
+As variáveis ficam no arquivo `.env`.
 
+Campos mínimos para desenvolvimento:
+
+```env
+SECRET_KEY=sua-chave
+DEBUG=True
+ALLOWED_HOSTS=*
+DATABASE_URL=
 ```
+
+Se `DATABASE_URL` estiver vazio, o projeto usa SQLite.
+
+## Estrutura principal
+
+```text
 brenobarber/
+├── barbearia/
+│   ├── admin.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── migrations/
+│   ├── static/
+│   └── templates/
 ├── brenobarber/
 │   ├── settings/
-│   │   └── base.py      ← configurações do projeto
+│   │   └── base.py
 │   ├── urls.py
 │   └── wsgi.py
-├── barbearia/            ← app principal
-│   ├── migrations/
-│   ├── templates/
-│   ├── models.py
-│   ├── views.py
-│   ├── forms.py          ← validação do agendamento
-│   ├── admin.py          ← painel Unfold com dashboard
-│   └── urls.py
 ├── .env
-├── .gitignore
 ├── manage.py
 └── requirements.txt
 ```
 
----
+## Regras de negócio atuais
 
-## Banco de dados
+- agendamentos novos são salvos como `confirmado`
+- o formulário impede reservar um horário já ocupado
+- a tarifa muda conforme o dia da semana para `Corte social`
+- o valor salvo no agendamento é usado no dashboard para consolidar receita
 
-**Desenvolvimento:** SQLite (padrão, sem configuração extra)
+## Qualidade
 
-**Produção:** PostgreSQL
+Comandos úteis:
 
 ```bash
-# No .env de produção:
-DATABASE_URL=postgres://usuario:senha@host:5432/brenobarber
+python manage.py check
+python manage.py test
 ```
 
-Provedores gratuitos recomendados: Railway.app, Supabase, Render.com
+Atualmente o projeto possui testes cobrindo:
+- criação de agendamento
+- bloqueio de horário já reservado
+- aplicação automática da tarifa por dia
+- carregamento básico da home
 
----
+## Deploy
 
-## Deploy em produção
+Antes de publicar:
 
-1. Preencha o `.env` com `DEBUG=False`, `SECRET_KEY` real e `DATABASE_URL`
-2. Rode `python manage.py collectstatic`
-3. Configure o servidor web (gunicorn + nginx, ou Railway/Render)
+```bash
+python manage.py migrate
+python manage.py collectstatic
+```
 
----
+Para produção, ajuste no `.env`:
 
-## Dashboard Admin (Unfold)
-
-O painel `/admin` exibe:
-- KPIs: agendamentos de hoje, confirmados e cancelados no mês
-- Dashboard com gráfico dos últimos 30 dias
-- Status colorido nos agendamentos (verde/vermelho)
-- Filtro por data e busca por nome/telefone
-# Brenobarber
+```env
+DEBUG=False
+SECRET_KEY=sua-chave-real
+DATABASE_URL=postgres://usuario:senha@host:5432/brenobarber
+```

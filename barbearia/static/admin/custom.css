@@ -1,0 +1,47 @@
+:root {
+  --color-primary-50: 255 241 241;
+  --color-primary-100: 255 218 218;
+  --color-primary-200: 255 179 179;
+  --color-primary-300: 255 130 130;
+  --color-primary-400: 255 75 75;
+  --color-primary-500: 239 68 68;
+  --color-primary-600: 220 38 38;
+  --color-primary-700: 185 28 28;
+  --color-primary-800: 153 27 27;
+  --color-primary-900: 127 29 29;
+  --color-primary-950: 69 10 10;
+}
+
+.dark {
+  --color-primary-50: 255 241 241;
+  --color-primary-100: 255 218 218;
+  --color-primary-200: 255 179 179;
+  --color-primary-300: 255 130 130;
+  --color-primary-400: 255 75 75;
+  --color-primary-500: 239 68 68;
+  --color-primary-600: 220 38 38;
+  --color-primary-700: 185 28 28;
+  --color-primary-800: 153 27 27;
+  --color-primary-900: 127 29 29;
+  --color-primary-950: 69 10 10;
+}
+
+.bg-primary-600,
+.dark .bg-primary-600 {
+  background-color: rgb(220 38 38) !important;
+}
+
+.text-primary-600,
+.dark .text-primary-500 {
+  color: rgb(220 38 38) !important;
+}
+
+.hover\:text-primary-600:hover,
+.dark .dark\:hover\:text-primary-500:hover {
+  color: rgb(239 68 68) !important;
+}
+
+.focus\:outline-primary-600:focus,
+.focus\:outline-primary-500:focus {
+  outline-color: rgb(220 38 38) !important;
+}
