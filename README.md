@@ -16,16 +16,17 @@ O projeto reúne:
 - SQLite em desenvolvimento
 - PostgreSQL em produção
 
-## Como rodar localmente
+# 🚀 Como rodar o projeto
 
 ```bash
+git clone https://github.com/ramoos05/Brenobarber.git
+cd Brenobarber
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate  # Windows
 pip install -r requirements.txt
+copy .env.example .env
 python manage.py migrate
-python manage.py createsuperuser
 python manage.py runserver
-```
 
 URLs úteis:
 - Site: `http://127.0.0.1:8000/`
