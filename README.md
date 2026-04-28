@@ -20,6 +20,22 @@ copy .env.example .env
 python manage.py migrate
 python manage.py runserver
 ```
+## 💈Essa é a visão do usuario
+
+
+https://github.com/user-attachments/assets/214d4981-8a9d-4b9c-ab7a-24b37fc45177
+
+
+
+
+## 💈Essa é a visào do Admin
+
+
+
+https://github.com/user-attachments/assets/c365d5b3-d05a-449a-b8bf-b5b7da057fa5
+
+
+
 
 ---
 
