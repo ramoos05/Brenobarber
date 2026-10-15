@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: brenobarber
+    runtime: python
+    plan: free
+    region: virginia
+    buildCommand: bash build.sh
+    startCommand: gunicorn brenobarber.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DJANGO_SETTINGS_MODULE
+        value: brenobarber.settings.prod
+      - key: SECRET_KEY
+        generateValue: true
+      # Cole a connection string do Neon quando o Render pedir
+      - key: DATABASE_URL
+        sync: false
+      # Admin criado no primeiro deploy
+      - key: DJANGO_SUPERUSER_USERNAME
+        value: admin
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
