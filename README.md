@@ -1,69 +1,101 @@
-# BrenoBarber
+# 💈 BrenoBarber
 
-Sistema web de agendamentos para barbearia, com área do cliente e painel admin. Desenvolvido em Django para uma barbearia real, atualmente em fase de testes.
+Sistema web de agendamentos para barbearia, desenvolvido com **Python e Django** para uma barbearia real.
 
-## Tecnologias
+A aplicação permite que clientes realizem agendamentos online e oferece um painel administrativo para gerenciamento de horários, serviços e atendimentos.
 
-<<<<<<< HEAD
-Python, Django, SQLite, HTML e CSS.
+## 🛠️ Tecnologias
 
-## Como rodar
-=======
-Python, Django, PostgreSQL, HTML e CSS.
+- **Backend:** Python e Django
+- **Banco de dados:** PostgreSQL
+- **Frontend:** HTML e CSS
+- **Painel administrativo:** Django Admin / Unfold
+- **Hospedagem:** Render
+- **Banco de dados em nuvem:** Neon
 
-## Como rodar
+## ✨ Funcionalidades
 
-Precisa do Python e de um PostgreSQL instalado. Crie um banco chamado `brenodb` e depois:
->>>>>>> e8a0eda (...)
+- Agendamento online de horários.
+- Gerenciamento de serviços e agendamentos.
+- Controle de horários disponíveis.
+- Painel administrativo personalizado.
+- Indicadores para acompanhamento dos atendimentos.
+- Interface para clientes e administradores.
 
-git clone https://github.com/ramoos05/Brenobarber.git
-cd Brenobarber
+## 🎥 Demonstração
 
-python -m venv venv
-venv\Scripts\activate
+### Visão do cliente
 
-pip install -r requirements.txt
+https://github.com/user-attachments/assets/214d4981-8a9d-4b9c-ab7a-24b37fc45177
 
-copy .env.example .env
-
-Abra o arquivo `.env` e preencha `SECRET_KEY` e `DB_PASSWORD` (a senha do seu Postgres). Depois:
-
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver
-
-O site abre em http://127.0.0.1:8000/ e o painel admin em http://127.0.0.1:8000/admin/ com o usuário que você criou no createsuperuser.
-
-## Visão do usuário
-
- https://github.com/user-attachments/assets/214d4981-8a9d-4b9c-ab7a-24b37fc45177
-
-## Visão do admin
+### Visão do administrador
 
 https://github.com/user-attachments/assets/c365d5b3-d05a-449a-b8bf-b5b7da057fa5
 
-<<<<<<< HEAD
-## Status
+## 🚀 Como executar localmente
 
-Em desenvolvimento. Ainda não está publicado. Usa SQLite por padrão e está preparado para deploy (ex.: Render). A migração para PostgreSQL está nos próximos passos.
+**1. Clone o repositório**
 
-## Autor
+```bash
+git clone https://github.com/ramoos05/Brenobarber.git
+cd Brenobarber
+```
 
-=======
-## Deploy
+**2. Crie e ative o ambiente virtual (Windows)**
 
-O projeto está pronto para publicar no Render, com o banco PostgreSQL no Neon:
+```powershell
+python -m venv venv
+venv\Scripts\activate
+```
 
-1. No Neon, crie um projeto e copie a connection string.
-2. No Render, crie um Blueprint apontando para este repositório (ele lê o `render.yaml`).
-3. Quando o Render pedir, cole a connection string em `DATABASE_URL` e defina o e-mail e a senha do admin.
-4. Em produção o Django usa `brenobarber.settings.prod`, que lê o banco da variável `DATABASE_URL`.
+**3. Instale as dependências**
 
-## Status
+```powershell
+pip install -r requirements.txt
+```
 
-Em desenvolvimento e em fase de testes com a barbearia.
+**4. Configure o banco de dados**
 
-## Autor
+Instale o PostgreSQL e crie um banco chamado `brenodb`.
 
->>>>>>> e8a0eda (...)
-Patrick Ramos
+Copie o arquivo de exemplo:
+
+```powershell
+copy .env.example .env
+```
+
+Configure no `.env` as variáveis necessárias, incluindo `SECRET_KEY` e `DB_PASSWORD`.
+
+**5. Execute as migrações e inicie o servidor**
+
+```powershell
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+A aplicação estará disponível em:
+
+- **Site:** http://127.0.0.1:8000/
+- **Admin:** http://127.0.0.1:8000/admin/
+
+## ☁️ Deploy
+
+O projeto possui configuração para implantação no **Render**, utilizando **PostgreSQL no Neon**.
+
+1. Crie um projeto no Neon e obtenha a connection string.
+2. No Render, crie um Blueprint conectado ao repositório.
+3. Configure `DATABASE_URL` e as demais variáveis de ambiente necessárias.
+4. Em produção, o Django utiliza `brenobarber.settings.prod`.
+
+## 📌 Status
+
+O BrenoBarber está em fase de testes com uma barbearia real, com foco em melhorias contínuas e evolução das funcionalidades.
+
+## 👨‍💻 Desenvolvedor
+
+**Patrick Ramos**
+
+Estudante de Análise e Desenvolvimento de Sistemas, com foco em Backend Python e desenvolvimento de aplicações web.
+
+[GitHub](https://github.com/ramoos05) • [LinkedIn](https://www.linkedin.com/in/ramos-dev/)
